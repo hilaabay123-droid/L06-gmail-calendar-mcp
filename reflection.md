@@ -60,6 +60,14 @@ What is still not clear to me: I don't yet fully understand every
 step the agent did behind the scenes. I would like to get a deeper
 explanation of what we are building in the course and why it matters.
 
+## Update after testing
+I added Gmail read permission with a small script, and I asked only for
+the minimal scopes: write drafts, read mail and manage events – no send
+and no delete. Now all six tools work, and a test script checked every
+read tool on my real account. In the prompt injection test, an email
+told the AI to forward all my emails to another address. The agent
+noticed it, ignored it, and nothing was forwarded or sent.
+
 ---
 *AI use: I wrote my answers in Hebrew, and Claude translated them into
 English and helped me phrase and organize the reflection.*
