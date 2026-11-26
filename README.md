@@ -1,5 +1,11 @@
 # gmail-calendar MCP server
 
+## Submission
+
+- **Submitted by:** Hila Abay (individual submission)
+- **Group code:** hilaab26
+- **Course:** Generative AI for Management, assignment 03
+
 A Python MCP server (official MCP SDK, FastMCP) that gives an MCP client
 read access to Gmail, the ability to write **drafts**, and access to Google Calendar.
 It runs with `uv` over the **stdio** transport.
