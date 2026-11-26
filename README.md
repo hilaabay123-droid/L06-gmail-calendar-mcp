@@ -18,6 +18,32 @@ It runs with `uv` over the **stdio** transport.
 No tool sends or deletes anything.
 All times use **Asia/Jerusalem**. A `start` or `end` without an offset, such as `2026-12-01T14:30`, is read as Jerusalem time.
 
+## Screenshots
+
+1. `/mcp` showing `gmail-calendar` connected with 6 tools
+
+   ![/mcp showing gmail-calendar connected](screenshots/01-mcp-connected.png)
+
+2. The terminal request that created the draft and the event
+
+   ![Terminal request creating the draft and the event](screenshots/02-calendar-question-and-mission.png)
+
+3. The "L06 test" draft in Gmail
+
+   ![L06 test draft in Gmail](screenshots/03-gmail-draft-L06-test.png)
+
+4. The "MCP works" event in Google Calendar
+
+   ![MCP works event in Google Calendar](screenshots/04-calendar-mcp-works.png)
+
+5. The "Study group" event in Google Calendar
+
+   ![Study group event in Google Calendar](screenshots/05-calendar-study-group.png)
+
+6. The agent refusing to send and delete
+
+   ![Agent refusing to send and delete](screenshots/06-boundary-send-delete-refused.png)
+
 ## Credentials (never stored in this project)
 
 The server reuses an existing OAuth client and `token.json`, both kept in a
