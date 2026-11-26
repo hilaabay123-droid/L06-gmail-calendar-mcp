@@ -161,11 +161,18 @@ Example request:
 
 - [x] **Server answers.** `test_server.py` starts it over stdio and gets its name and all 6 tools
 - [x] **Calendar read works.** `list_events(days_ahead=1)` returns real events with the current token
-- [ ] **Connected in Claude Code.** After `claude mcp add ...`, `/mcp` shows `gmail-calendar` as **connected**
-- [ ] **Draft and event from one request.** A single free-text request creates one Gmail draft (visible in Gmail Drafts, not sent) and one calendar event starting 4 hours from now, in Asia/Jerusalem time
-- [ ] **Send and delete refused.** Asking Claude to send an email, or to delete an email or event, fails because no tool can do it
+- [x] **Connected in Claude Code.** After `claude mcp add ...`, `/mcp` shows `gmail-calendar` as **connected**
+  - Screenshot: [`screenshots/01-mcp-connected.png.png`](screenshots/01-mcp-connected.png.png)
+- [x] **Draft and event from one request.** A single free-text request creates one Gmail draft (visible in Gmail Drafts, not sent) and one calendar event starting 4 hours from now, in Asia/Jerusalem time
+  - Request: [`screenshots/02-calendar-question-and-mission.png.png`](screenshots/02-calendar-question-and-mission.png.png)
+  - Draft "L06 test" in Gmail: [`screenshots/03-gmail-draft-L06-test.png.png`](screenshots/03-gmail-draft-L06-test.png.png)
+  - Event "MCP works" in Calendar: [`screenshots/04-calendar-mcp-works.png.png`](screenshots/04-calendar-mcp-works.png.png)
+  - Follow-up "Study group" event in a free slot: [`screenshots/05-calendar-study-group.png.png`](screenshots/05-calendar-study-group.png.png)
+- [x] **Send and delete refused.** Asking Claude to send an email, or to delete an email or event, fails because no tool can do it
+  - Screenshot: [`screenshots/06-boundary-send-delete-refused.png.png`](screenshots/06-boundary-send-delete-refused.png.png)
 - [x] **No send or delete code.** The code contains no `send`, `delete`, `trash`, `modify`, `update` or `patch` API calls
-- [ ] **No secrets in git.** After `git init` and `git add .`, `git status` shows no `token.json`, `client_secret*.json`, `credentials.json` or `.env`
+- [x] **No secrets in git.** After `git init` and `git add .`, `git status` shows no `token.json`, `client_secret*.json`, `credentials.json` or `.env`
+  - No screenshot yet. Proven by the `git status` output shown before the first commit (`bbe4eed`), where none of these files was staged
 - [x] **Size limit.** Every `.py` file is under 150 lines
 
 ## 9. Risks and limitations
