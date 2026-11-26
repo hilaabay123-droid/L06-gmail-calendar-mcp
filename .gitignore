@@ -1,6 +1,7 @@
 # Google secrets - they live in GOOGLE_PRIVATE_DIR, never in this project
 token.json
 client_secret_mygoogle.com.json
+client_secret*.json
 credentials.json
 .env
 

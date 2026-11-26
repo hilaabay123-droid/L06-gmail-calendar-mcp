@@ -16,7 +16,10 @@ from mcp.server.fastmcp.exceptions import ToolError
 
 TOKEN_FILE = "token.json"
 CLIENT_FILE = "client_secret_mygoogle.com.json"
-REAUTH_HINT = "Re-authorize outside this server (it never opens a browser) and update token.json."
+REAUTH_HINT = (
+    "Run 'uv run scripts/create_token.py' once to sign in again and save a new token.json "
+    "(this server never opens a browser)."
+)
 
 _creds: Credentials | None = None
 
