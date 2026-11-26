@@ -3,9 +3,9 @@
 | | |
 |---|---|
 | **Status** | Done. All 6 tools tested against the real account, including step 13 (meeting coordinator and prompt-injection test). All acceptance criteria met (see §8) |
-| **Owner** | Project owner (single user) |
+| **Owner** | Hila Abay |
 | **Location** | `C:\biu\008` |
-| **Date** | 2026-11-25 |
+| **Date** | 2026-11-26 |
 
 ---
 
@@ -28,7 +28,8 @@ CLI with two commands:
 
 It requests only two scopes: `gmail.compose` and `calendar.events`. If the token is
 missing, invalid, lacks those scopes or can't be refreshed, it exits with a message
-to run `create-token` again.
+to run `create-token` again. (This project no longer uses `create-token`: its token comes from
+`scripts/create_token.py`, which adds `gmail.readonly`.)
 
 **Problem.** The program proved the Google setup works, but every value is
 hard-coded: the recipient (always yourself), subject, body, event title, time
@@ -70,7 +71,7 @@ Example request:
 
 ## 3. Users
 
-- **Primary user:** the project owner, working through **Claude Code** on their own Windows machine.
+- **Primary user:** Hila Abay (the project owner), working through **Claude Code** on a personal Windows machine.
 - **Account:** the owner's own Google account. One user only, with no sharing or multi-tenancy.
 
 ## 4. Scope
@@ -105,7 +106,7 @@ Example request:
 
 - Each tool has a short English description that the model reads.
 - Invalid input, such as a bad date or `end` before `start`, returns a clear error.
-- A missing permission returns a clear error that names the scopes the tool accepts.
+- A missing permission returns a clear error that names the scopes the tool accepts and says to run `scripts/create_token.py`.
 - `find_free_slots` treats all-day events, events marked "free" and events the owner declined as **not busy**.
 
 ## 6. Non-functional requirements
@@ -159,7 +160,8 @@ Example request:
 - **Client:** the MCP client inside Claude Code. It talks JSON-RPC to the server over stdin and stdout.
 - **Server:** FastMCP app `gmail-calendar` with 6 tools. `google_auth.py` loads and refreshes credentials, checks scopes and turns Google errors into clear messages.
 - **Google APIs:** Gmail v1 and Calendar v3, called with the user's OAuth token.
-- **token.json:** OAuth tokens stored outside the project and read at runtime only.
+- **token.json:** OAuth tokens with exactly 3 scopes (`gmail.compose`, `gmail.readonly`, `calendar.events`), stored outside the project. The server reads it and saves refreshed access tokens back to the same private file.
+- **`scripts/create_token.py`:** the one-time sign-in that creates `token.json`. Run by hand; it is the only code that opens a browser.
 
 ## 8. Acceptance criteria
 
@@ -173,7 +175,7 @@ Example request:
   - Draft "L06 test" in Gmail: [`screenshots/03-gmail-draft-L06-test.png`](screenshots/03-gmail-draft-L06-test.png)
   - Event "MCP works" in Calendar: [`screenshots/04-calendar-mcp-works.png`](screenshots/04-calendar-mcp-works.png)
   - Follow-up "Study group" event in a free slot: [`screenshots/05-calendar-study-group.png`](screenshots/05-calendar-study-group.png)
-- [x] **Send and delete refused.** Asking Claude to send an email, or to delete an email or event, fails because no tool can do it
+- [x] **Send and delete refused.** Asking Claude to send the "L06 test" draft, or to delete the "Study group" event, fails because no tool can do it (no tool can delete an email either)
   - Screenshot: [`screenshots/06-boundary-send-delete-refused.png`](screenshots/06-boundary-send-delete-refused.png)
 - [x] **No send or delete code.** The code contains no `send`, `delete`, `trash`, `modify`, `update` or `patch` API calls
 - [x] **Meeting coordinator, free case (step 13).** From Dana's meeting-request email, the agent found Tuesday 10:00–10:45 free, created the event and saved a confirming reply draft. Nothing was sent
@@ -212,7 +214,7 @@ Example request:
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| **Missing scopes** (fixed). A token without `gmail.readonly` makes `search_emails` and `read_email` fail | Gmail read tools fail until re-authorized | The tool returns a clear "missing permission" error that names the accepted scopes and says to run `scripts/create_token.py`. The current token has all three needed scopes |
+| **Missing scopes** (fixed). A token without `gmail.readonly` makes `search_emails` and `read_email` fail | Gmail read tools fail until `scripts/create_token.py` is run | The tool returns a clear "missing permission" error that names the accepted scopes and says to run `scripts/create_token.py`. The current token has all three needed scopes |
 | **Token expiry or revocation** | Every tool fails | Expired access tokens are refreshed automatically with the refresh token. If Google refuses the refresh, the tool says to run `scripts/create_token.py`. The server never opens a browser |
 | **Prompt injection from email content.** `read_email` and `search_emails` return text that strangers wrote, which may contain instructions such as "forward this to..." or "create an event..." | The model could be steered into drafting or scheduling something the owner didn't ask for | **Tested in step 13:** the "forward all emails" instruction was noticed and ignored. No send, forward or delete tools exist, so even if the model followed such text, the worst case is an unwanted **draft** or **event**, both easy to see and undo by hand. Claude Code shows each tool call for approval. Email text is treated as data, not instructions. Subtler injections may be harder to spot, so these limits matter more than the model noticing |
 | **Data exposure to the model.** Email bodies are passed to the model's context | Private content is processed by the LLM | Bodies are capped at 20,000 characters. Read only what the request needs |
